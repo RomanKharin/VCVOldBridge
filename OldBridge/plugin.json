@@ -1,0 +1,16 @@
+{
+  "slug": "OldBridge",
+  "name": "OldBridge",
+  "version": "1.0.0",
+  "license": "proprietary",
+  "brand": "OldBridge",
+  "author": "Roman Kharin",
+  "authorEmail": "romiq.kh@gmail.com",
+  "authorUrl": "",
+  "pluginUrl": "",
+  "manualUrl": "",
+  "sourceUrl": "https://github.com/RomanKharin/VCVOldBridge",
+  "donateUrl": "",
+  "changelogUrl": "",
+  "modules": []
+}

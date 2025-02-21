@@ -1,0 +1,7 @@
+OldBridge/build
+OldBridge/dist
+OldBridge/*.so
+OldBridge//*.so
+OldBridge//*.dylib
+OldBridge//*.dll
+OldBridge/.DS_Store
