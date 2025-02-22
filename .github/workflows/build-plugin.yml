@@ -54,6 +54,12 @@ jobs:
       - name: Build plugin
         run: |
           export PLUGIN_DIR=$GITHUB_WORKSPACE
+          echo
+          env
+          echo
+          ls -laR
+          echo
+          pwd
           pushd ${{ env.rack-plugin-toolchain-dir }}
           make plugin-build-${{ matrix.platform }}
       - name: Upload artifact
