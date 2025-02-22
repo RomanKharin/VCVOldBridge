@@ -1,9 +1,9 @@
 {
   "slug": "OldBridge",
-  "name": "OldBridge",
-  "version": "1.0.0",
+  "name": "Old Bridge",
+  "version": "2.0.0",
   "license": "proprietary",
-  "brand": "OldBridge",
+  "brand": "Old Bridge",
   "author": "Roman Kharin",
   "authorEmail": "romiq.kh@gmail.com",
   "authorUrl": "",
@@ -12,5 +12,12 @@
   "sourceUrl": "https://github.com/RomanKharin/VCVOldBridge",
   "donateUrl": "",
   "changelogUrl": "",
-  "modules": []
+  "modules": [
+    {
+      "slug": "Smile",
+      "name": "Smile",
+      "description": "Simple panel )))",
+      "tags": ["Blank"]
+    }
+  ]
 }
