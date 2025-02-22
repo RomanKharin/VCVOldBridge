@@ -156,6 +156,8 @@ jobs:
           token: ${{ github.token }}
           tag: Nightly # This may also be of the form 'refs/tags/staging'
           assets: '*'
+          fail-if-no-release: false
+          fail-if-no-assets: false
       - name: Upload release assets
         uses: svenstaro/upload-release-action@v2
         with:
@@ -163,5 +165,3 @@ jobs:
           file: _artifacts/**/*.vcvplugin
           tag: Nightly
           file_glob: true
-          fail-if-no-release: false
-          fail-if-no-assets: false
