@@ -95,7 +95,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          path: dist/*.vcvplugin
+          path: OldBridge/dist/*.vcvplugin
           name: mac-${{ matrix.platform }}
 
   publish:
