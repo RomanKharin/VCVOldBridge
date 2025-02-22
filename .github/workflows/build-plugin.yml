@@ -33,9 +33,6 @@ jobs:
     name: ${{ matrix.platform }}
     needs: modify-plugin-version
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./OldBridge
     container:
       image: ghcr.io/qno/rack-plugin-toolchain-win-linux
       options: --user root
@@ -49,17 +46,11 @@ jobs:
       - uses: actions/cache@v3
         id: plugin-version-cache
         with:
-          path: plugin.json
+          path: OldBridge/plugin.json
           key: ${{ github.sha }}-${{ github.run_id }}
       - name: Build plugin
         run: |
-          export PLUGIN_DIR=$GITHUB_WORKSPACE
-          echo
-          env
-          echo
-          ls -laR
-          echo
-          pwd
+          export PLUGIN_DIR=$GITHUB_WORKSPACE/OldBridge
           pushd ${{ env.rack-plugin-toolchain-dir }}
           make plugin-build-${{ matrix.platform }}
       - name: Upload artifact
