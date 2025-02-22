@@ -163,3 +163,5 @@ jobs:
           file: _artifacts/**/*.vcvplugin
           tag: Nightly
           file_glob: true
+          fail-if-no-release: false
+          fail-if-no-assets: false
