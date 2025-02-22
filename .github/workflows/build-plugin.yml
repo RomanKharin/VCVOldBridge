@@ -19,13 +19,13 @@ jobs:
       - uses: actions/cache@v3
         id: plugin-version-cache
         with:
-          path: plugin.json
+          path: OldBridge/plugin.json
           key: ${{ github.sha }}-${{ github.run_id }}
       - run: |
           gitrev=`git rev-parse --short HEAD`
-          pluginversion=`jq -r '.version' plugin.json`
+          pluginversion=`jq -r '.version' OldBridge/plugin.json`
           echo "Set plugin version from $pluginversion to $pluginversion-$gitrev"
-          cat <<< `jq --arg VERSION "$pluginversion-$gitrev" '.version=$VERSION' plugin.json` > plugin.json
+          cat <<< `jq --arg VERSION "$pluginversion-$gitrev" '.version=$VERSION' OldBridge/plugin.json` > OldBridge/plugin.json
         # only modify plugin version if no tag was created
         if: "! startsWith(github.ref, 'refs/tags/v')"
 
@@ -46,7 +46,7 @@ jobs:
       - uses: actions/cache@v3
         id: plugin-version-cache
         with:
-          path: plugin.json
+          path: OldBridge/plugin.json
           key: ${{ github.sha }}-${{ github.run_id }}
       - name: Build plugin
         run: |
@@ -74,7 +74,7 @@ jobs:
       - uses: actions/cache@v3
         id: plugin-version-cache
         with:
-          path: plugin.json
+          path: OldBridge/plugin.json
           key: ${{ github.sha }}-${{ github.run_id }}
       - name: Get Rack-SDK
         run: |
@@ -107,7 +107,7 @@ jobs:
       - uses: FranzDiebold/github-env-vars-action@v2
       - name: Check if plugin version matches tag
         run: |
-          pluginversion=`jq -r '.version' plugin.json`
+          pluginversion=`jq -r '.version' OldBridge/plugin.json`
           if [ "v$pluginversion" != "${{ env.CI_REF_NAME }}" ]; then
             echo "Plugin version from plugin.json 'v$pluginversion' doesn't match with tag version '${{ env.CI_REF_NAME }}'"
             exit 1
