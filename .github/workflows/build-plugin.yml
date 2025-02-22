@@ -104,6 +104,8 @@ jobs:
     # see also https://vcvrack.com/manual/Manifest#version
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
+    permission:
+      contents: write
     needs:  [build, build-mac]
     steps:
       - uses: actions/checkout@v3
@@ -141,6 +143,8 @@ jobs:
     # see also https://vcvrack.com/manual/Manifest#version
     if: ${{ github.ref == 'refs/heads/v2-dev' && github.repository_owner == 'RomanKharin' }}
     runs-on: ubuntu-latest
+    permission:
+      contents: write
     needs: [build, build-mac]
     steps:
       - uses: actions/download-artifact@v4
