@@ -33,6 +33,9 @@ jobs:
     name: ${{ matrix.platform }}
     needs: modify-plugin-version
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./OldBridge
     container:
       image: ghcr.io/qno/rack-plugin-toolchain-win-linux
       options: --user root
@@ -46,13 +49,12 @@ jobs:
       - uses: actions/cache@v3
         id: plugin-version-cache
         with:
-          path: OldBridge/plugin.json
+          path: plugin.json
           key: ${{ github.sha }}-${{ github.run_id }}
       - name: Build plugin
         run: |
           export PLUGIN_DIR=$GITHUB_WORKSPACE
           pushd ${{ env.rack-plugin-toolchain-dir }}
-          cd OldBridge
           make plugin-build-${{ matrix.platform }}
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -64,6 +66,9 @@ jobs:
     name: mac
     needs: modify-plugin-version
     runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: ./OldBridge
     strategy:
       fail-fast: false
       matrix:
@@ -88,7 +93,6 @@ jobs:
           CROSS_COMPILE_TARGET_arm64=arm64-apple-darwin
           export RACK_DIR=$HOME/Rack-SDK
           export CROSS_COMPILE=$CROSS_COMPILE_TARGET_${{ matrix.platform }}
-          cd OldBridge
           make dep
           make dist
       - name: Upload artifact
