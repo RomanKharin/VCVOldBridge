@@ -35,7 +35,7 @@ struct Filter : Module
     {
         config(PARAMS_LEN, INPUTS_LEN, OUTPUTS_LEN, LIGHTS_LEN);
         configInput(AUDIO_IN_INPUT, "Audio");
-        configParam(GAIN_PARAM, -1.f, 1.f, 0.f, "Gain");
+        configParam(GAIN_PARAM, -0.0, 1.f, 0.5f, "Gain");
 
         fft_setup = pffft_new_setup(FFT_SIZE, PFFFT_REAL);
         read_pos = 0;
@@ -48,9 +48,10 @@ struct Filter : Module
 
     void process(const ProcessArgs &args) override
     {
+		float gain = params[GAIN_PARAM].getValue();
         if (inputs[AUDIO_IN_INPUT].isConnected())
         {
-            input_buffer[read_pos] = inputs[AUDIO_IN_INPUT].getVoltage();
+            input_buffer[read_pos] = inputs[AUDIO_IN_INPUT].getVoltage() * gain;
         }
         else
         {
