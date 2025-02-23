@@ -18,6 +18,7 @@ struct Filter : Module
     };
     enum OutputId
     {
+        AUDIO_OUT_OUTPUT,
         OUTPUTS_LEN
     };
     enum LightId
@@ -26,6 +27,7 @@ struct Filter : Module
     };
 
     alignas(16) float input_buffer[FFT_SIZE] = {0.0f};
+    alignas(16) float proc_buffer[FFT_SIZE] = {0.0f};
     alignas(16) float read_buffer[BULK_DATA] = {0.0f};
     alignas(16) float fft_buffer[FFT_SIZE * 2] = {0.0f};
     PFFFT_Setup *fft_setup;
@@ -35,6 +37,7 @@ struct Filter : Module
     {
         config(PARAMS_LEN, INPUTS_LEN, OUTPUTS_LEN, LIGHTS_LEN);
         configInput(AUDIO_IN_INPUT, "Audio");
+        configInput(AUDIO_OUT_OUTPUT, "Main");
         configParam(GAIN_PARAM, -0.0, 1.f, 0.5f, "Gain");
 
         fft_setup = pffft_new_setup(FFT_SIZE, PFFFT_REAL);
@@ -48,23 +51,31 @@ struct Filter : Module
 
     void process(const ProcessArgs &args) override
     {
-		float gain = params[GAIN_PARAM].getValue();
+        float gain = params[GAIN_PARAM].getValue();
         if (inputs[AUDIO_IN_INPUT].isConnected())
         {
-            input_buffer[read_pos] = inputs[AUDIO_IN_INPUT].getVoltage() * gain;
+            read_buffer[read_pos] = inputs[AUDIO_IN_INPUT].getVoltage() * gain;
         }
         else
         {
-            input_buffer[read_pos] = 0.f;
+            read_buffer[read_pos] = 0.f;
         }
+        outputs[AUDIO_OUT_OUTPUT].setVoltage(input_buffer[read_pos]);
+
         read_pos++;
         if (read_pos >= BULK_DATA)
         {
             read_pos = 0;
-            // shift buffer to right
-            memmove(input_buffer + BULK_DATA, input_buffer, (FFT_SIZE - BULK_DATA) * sizeof(float));
-            // copy new part
-            memcpy(input_buffer, read_buffer, BULK_DATA * sizeof(float));
+            // shift buffer to left
+            std::move(input_buffer + BULK_DATA, input_buffer + FFT_SIZE, input_buffer);
+            // copy new part to end
+            std::copy(read_buffer, read_buffer + BULK_DATA, input_buffer + FFT_SIZE - BULK_DATA);
+            // window
+            for (int i = 0; i < FFT_SIZE; i++)
+            {
+                float a = 0.5f - cos((float(i) / (FFT_SIZE - 1)) * M_PI * 2) * 0.5f;
+                proc_buffer[i] = input_buffer[i] * a;
+            }
             // dfft
             pffft_transform_ordered(fft_setup, input_buffer, fft_buffer, nullptr, PFFFT_FORWARD);
             // scale
@@ -72,6 +83,10 @@ struct Filter : Module
             for (int i = 0; i < FFT_SIZE * 2; i++)
             {
                 fft_buffer[i] *= a;
+            }
+            // debug view
+            if (false) {
+                memcpy(fft_buffer, proc_buffer, FFT_SIZE * sizeof(float));
             }
         }
     }
@@ -135,7 +150,7 @@ struct GraphDisplay : TransparentWidget
             nvgBeginPath(args.vg);
             for (ssize_t i = 0; i < FFT_SIZE / 2; i++)
             {
-                float xpos = (float(i) / (FFT_SIZE / 2 - 1)) * b.size.x;
+                float xpos = (float(i) / (FFT_SIZE / 2 - 1)) * (b.size.x) + 1;
                 nvgMoveTo(args.vg, xpos, y_pos);
                 nvgLineTo(args.vg, xpos, y_pos - abs(module->fft_buffer[i * 2]) * 100.f);
             }
@@ -146,7 +161,7 @@ struct GraphDisplay : TransparentWidget
             nvgBeginPath(args.vg);
             for (ssize_t i = 0; i < FFT_SIZE / 2; i++)
             {
-                float xpos = (float(i) / (FFT_SIZE / 2 - 1)) * b.size.x;
+                float xpos = (float(i) / (FFT_SIZE / 2 - 1)) * (b.size.x) + 1;
                 nvgMoveTo(args.vg, xpos, y_pos);
                 nvgLineTo(args.vg, xpos, y_pos + abs(module->fft_buffer[i * 2 + 1]) * 100.f);
             }
@@ -173,6 +188,7 @@ struct FilterWidget : ModuleWidget
         addChild(createWidget<ScrewBlack>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
         addInput(createInputCentered<PJ301MPort>(mm2px(Vec(PU(panel->getLine(0)), PU(90))), module, Filter::AUDIO_IN_INPUT));
+        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(PU(panel->getLine(0)), PU(230))), module, Filter::AUDIO_OUT_OUTPUT));
 
         addParam(createParamCentered<OldBridgeRoundSmallBlackKnob>(mm2px(Vec(PU(panel->getLine(0)), PU(120))), module, Filter::GAIN_PARAM));
 
