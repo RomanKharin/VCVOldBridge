@@ -17,13 +17,26 @@
       "slug": "Smile",
       "name": "Smile",
       "description": "Simple panel )))",
-      "tags": ["Blank"]
+      "tags": [
+        "Blank"
+      ]
     },
     {
       "slug": "Looper",
       "name": "Looper",
       "description": "Minimalisic looper",
-      "tags": ["Looper", "Polyphony"]
+      "tags": [
+        "Looper",
+        "Polyphony"
+      ]
+    },
+    {
+      "slug": "Filter",
+      "name": "Filter",
+      "description": "Filter",
+      "tags": [
+        "Filter"
+      ]
     }
   ]
 }

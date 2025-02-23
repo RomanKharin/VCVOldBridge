@@ -10,4 +10,5 @@ void init(Plugin* p) {
 	// Add modules here
 	p->addModel(modelSmile);
 	p->addModel(modelLooper);
+	p->addModel(modelFilter);
 }
