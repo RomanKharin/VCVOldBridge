@@ -29,7 +29,7 @@ struct Filter : Module
     alignas(16) float input_buffer[FFT_SIZE] = {0.0f};
     alignas(16) float proc_buffer[FFT_SIZE] = {0.0f};
     alignas(16) float read_buffer[BULK_DATA] = {0.0f};
-    alignas(16) float fft_buffer[FFT_SIZE * 2] = {0.0f};
+    alignas(16) float fft_buffer[FFT_SIZE] = {0.0f};
     PFFFT_Setup *fft_setup;
     ssize_t read_pos;
 
@@ -77,10 +77,10 @@ struct Filter : Module
                 proc_buffer[i] = input_buffer[i] * a;
             }
             // dfft
-            pffft_transform_ordered(fft_setup, input_buffer, fft_buffer, nullptr, PFFFT_FORWARD);
+            pffft_transform(fft_setup, input_buffer, fft_buffer, nullptr, PFFFT_FORWARD);
             // scale
-            float a = 1.f / FFT_SIZE * 2;
-            for (int i = 0; i < FFT_SIZE * 2; i++)
+            float a = 1.f / FFT_SIZE;
+            for (int i = 0; i < FFT_SIZE; i++)
             {
                 fft_buffer[i] *= a;
             }

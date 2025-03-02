@@ -1,29 +1,6 @@
 #include "plugin.hpp"
 #include "oldbridge.hpp"
 
-#define X_LINE_1 15
-#define X_LINE 45
-#define H_IN_KNOB 20
-#define D_LED_IN 9
-#define W_IN_LABEL 10.5
-#define W_KNOB_LABEL 12.5
-#define W_OUT_LABEL 13.5
-
-#define W_TOP 45
-// min_distance for IN - IN = 23
-#define W_SPACE_IN_IN 25
-#define W_SPACE_INKNOB_IN 25 + H_IN_KNOB
-// min_distance for IN+KNOB - IN = H_IN_KNOB+23
-#define W_SPACE_INKNOB_KNOB 23 + H_IN_KNOB
-
-#define W_CV W_TOP + W_SPACE_IN_IN
-#define W_AUDIO W_CV + W_SPACE_IN_IN
-
-#define W_GAIN W_AUDIO + W_SPACE_IN_IN
-
-#define W_PRELAST 200
-#define W_LAST 230
-
 #define MAX_POLY_CHANNELS 16
 
 struct Looper : Module
@@ -71,33 +48,51 @@ struct Looper : Module
     }
 };
 
+inline namespace LooperPanelConst
+{
+    const float PanelWidth = 90;
+    const float Center = PanelWidth / 2.f;
+    const float LeftLine = 15;
+
+    const float CaptionTop = 13;
+    const float WidgetTop = 45;
+    const float GateInTop = WidgetTop;
+    const float CVTop = GateInTop + OldBridgeConst::HJackJack;
+    const float AudioInTop = CVTop + OldBridgeConst::HJackJack;
+    const float GainTop = AudioInTop + OldBridgeConst::HJackKnob;
+    const float WidgetPreLast = 230;
+    const float WidgetLast = 230;
+};
+
+using namespace OldBridgeConst;
 struct LooperPanel : OldBridgeBasePanel
 {
+
     void draw(const DrawArgs &args) override
     {
         OldBridgeBasePanel::draw(args);
 
-        nvgFillColor(args.vg, nvgRGBAf(1, 1, 1, 1.0));
-        fillLabel(args, getLine(0), 13, "Looper", 12, true);
+        nvgFillColor(args.vg, RGBForeground);
+        fillLabel(args, Center, CaptionTop, "Looper", 12, true);
 
-        fillLabel(args, X_LINE_1, W_TOP - 10.5, "GATE IN");
-        fillLabel(args, X_LINE_1, W_CV - 10.5, "CV IN");
-        fillLabel(args, X_LINE_1, W_AUDIO - 10.5, "AUDIO IN");
+        fillLabel(args, LeftLine, GateInTop - HLabelInJack, "GATE IN");
+        fillLabel(args, LeftLine, CVTop - HLabelInJack, "CV IN");
+        fillLabel(args, LeftLine, AudioInTop - HLabelInJack, "AUDIO IN");
 
-        fillLabel(args, X_LINE, W_LAST - W_OUT_LABEL, "GATE OUT");
+        fillLabel(args, LeftLine, WidgetLast - HLabelOutJack, "GATE OUT");
 
-        fillLabel(args, getLine(0), W_GAIN - W_KNOB_LABEL, "GAIN");
-        drawKnobGauge(args, getLine(0), W_GAIN);
+        fillLabel(args, Center, GainTop - HLabelKnob, "GAIN");
+        drawKnobGauge(args, Center, GainTop);
 
         // points
         nvgBeginPath(args.vg);
-        fillKnobPoint(args, getLine(0), W_GAIN, 0.25f);
-        fillKnobPoint(args, getLine(0), W_GAIN, 0.5f);
-        fillKnobPoint(args, getLine(0), W_GAIN, 0.75f);
+        fillKnobPoint(args, Center, GainTop, 0.25f);
+        fillKnobPoint(args, Center, GainTop, 0.5f);
+        fillKnobPoint(args, Center, GainTop, 0.75f);
         nvgFill(args.vg);
 
         // gate out
-        drawOutRect(args, X_LINE, W_LAST, true, false);
+        drawOutRect(args, LeftLine, WidgetLast, true, false);
     }
 };
 
@@ -107,7 +102,7 @@ struct LooperWidget : ModuleWidget
     {
         setModule(module);
         auto panel = new LooperPanel();
-        panel->setPanelWidth(90);
+        panel->setPanelWidth(PanelWidth);
         setPanel(panel);
 
         addChild(createWidget<ScrewBlack>(Vec(RACK_GRID_WIDTH, 0)));
@@ -115,13 +110,13 @@ struct LooperWidget : ModuleWidget
         addChild(createWidget<ScrewBlack>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
         addChild(createWidget<ScrewBlack>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(PU(X_LINE_1), PU(W_TOP))), module, Looper::GATE_IN_INPUT));
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(PU(X_LINE_1), PU(W_CV))), module, Looper::CV_IN_INPUT));
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(PU(X_LINE_1), PU(W_AUDIO))), module, Looper::AUDIO_IN_INPUT));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(PU(LeftLine), PU(GateInTop))), module, Looper::GATE_IN_INPUT));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(PU(LeftLine), PU(CVTop))), module, Looper::CV_IN_INPUT));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(PU(LeftLine), PU(AudioInTop))), module, Looper::AUDIO_IN_INPUT));
 
-        addParam(createParamCentered<OldBridgeRoundSmallBlackKnob>(mm2px(Vec(PU(panel->getLine(0)), PU(W_GAIN))), module, Looper::GAIN_PARAM));
+        addParam(createParamCentered<OldBridgeRoundSmallBlackKnob>(mm2px(Vec(PU(Center), PU(GainTop))), module, Looper::GAIN_PARAM));
 
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(PU(X_LINE), PU(W_LAST))), module, Looper::GATE_OUT_OUTPUT));
+        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(PU(LeftLine), PU(WidgetLast))), module, Looper::GATE_OUT_OUTPUT));
     }
 };
 

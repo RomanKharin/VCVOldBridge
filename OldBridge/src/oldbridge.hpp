@@ -10,6 +10,21 @@
 
 using namespace rack;
 
+namespace OldBridgeConst
+{
+    const float HInKnob = 20;
+    const float WHJackLed = 9;
+    const float HLabelInJack = 10.5;
+    const float HLabelOutJack = 13.5;
+    const float HLabelKnob = 12.5;
+    const float HJackJack = 25;
+    const float HJackKnob = 25;
+
+    const NVGcolor RGBDark = nvgRGB(0x10, 0x10, 0x10);
+    const NVGcolor RGBForeground = nvgRGB(0xFF, 0xFF, 0xFF);
+    const NVGcolor RGBBackground= nvgRGB(0x77, 0x77, 0x77);
+};
+
 struct OldBridgeRoundSmallBlackKnob : RoundKnob
 {
     OldBridgeRoundSmallBlackKnob()
