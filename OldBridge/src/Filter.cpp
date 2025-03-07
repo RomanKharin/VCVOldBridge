@@ -92,6 +92,12 @@ struct Filter : Module
     }
 };
 
+inline namespace FilterPanelConst
+{
+    const float PanelWidth = 100;
+    const float Center = PanelWidth / 2.f;
+};
+
 struct FilterPanel : OldBridgeBasePanel
 {
     void draw(const DrawArgs &args) override
@@ -99,19 +105,19 @@ struct FilterPanel : OldBridgeBasePanel
         OldBridgeBasePanel::draw(args);
 
         nvgFillColor(args.vg, nvgRGBAf(1, 1, 1, 1.0));
-        fillLabel(args, getLine(0), 13, "Simple Filter", 12, true);
+        fillLabel(args, Center, 13, "Simple Filter", 12, true);
 
-        fillLabel(args, getLine(0), 90 - 10.5, "AUDIO IN");
+        fillLabel(args, Center, 90 - 10.5, "AUDIO IN");
 
-        fillLabel(args, getLine(0), 120 - 12.5, "GAIN");
-        drawKnobGauge(args, getLine(0), 120);
+        fillLabel(args, Center, 120 - 12.5, "GAIN");
+        drawKnobGauge(args, Center, 120);
 
         drawRoundRect(args, 4, 20, 92, 55, true);
 
         // points
         nvgBeginPath(args.vg);
-        nvgFillColor(args.vg, nvgRGB(FG_RGB));
-        fillKnobPoint(args, getLine(0), 120, 0.5f);
+        nvgFillColor(args.vg, OldBridgeConst::RGBForeground);
+        fillKnobPoint(args, Center, 120, 0.5f);
         nvgFill(args.vg);
     }
 };
@@ -179,7 +185,7 @@ struct FilterWidget : ModuleWidget
     {
         setModule(module);
         auto panel = new FilterPanel();
-        panel->setPanelWidth(100);
+        panel->setPanelWidth(PanelWidth);
         setPanel(panel);
 
         addChild(createWidget<ScrewBlack>(Vec(RACK_GRID_WIDTH, 0)));
@@ -187,10 +193,10 @@ struct FilterWidget : ModuleWidget
         addChild(createWidget<ScrewBlack>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
         addChild(createWidget<ScrewBlack>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(PU(panel->getLine(0)), PU(90))), module, Filter::AUDIO_IN_INPUT));
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(PU(panel->getLine(0)), PU(230))), module, Filter::AUDIO_OUT_OUTPUT));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(PU(Center), PU(90))), module, Filter::AUDIO_IN_INPUT));
+        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(PU(Center), PU(230))), module, Filter::AUDIO_OUT_OUTPUT));
 
-        addParam(createParamCentered<OldBridgeRoundSmallBlackKnob>(mm2px(Vec(PU(panel->getLine(0)), PU(120))), module, Filter::GAIN_PARAM));
+        addParam(createParamCentered<OldBridgeRoundSmallBlackKnob>(mm2px(Vec(PU(Center), PU(120))), module, Filter::GAIN_PARAM));
 
         GraphDisplay *display = createWidget<GraphDisplay>(mm2px(Vec(PU(5), PU(21))));
         display->box.size = mm2px(Vec(PU(90), PU(53)));

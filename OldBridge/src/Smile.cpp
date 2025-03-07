@@ -30,6 +30,12 @@ struct Smile : Module
 	}
 };
 
+inline namespace SmilePanelConst
+{
+    const float PanelWidth = 100;
+    const float Center = PanelWidth / 2.f;
+};
+
 struct SmilePanel : OldBridgeBasePanel
 {
 	void draw(const DrawArgs &args) override
@@ -37,8 +43,8 @@ struct SmilePanel : OldBridgeBasePanel
 		OldBridgeBasePanel::draw(args);
 
 		nvgFillColor(args.vg, nvgRGBAf(1, 1, 1, 1.0));
-		fillLabel(args, getLine(0), 21, "Russian", 19, true);
-		fillLabel(args, getLine(0), 36, "Smile", 19, true);
+		fillLabel(args, Center, 21, "Russian", 19, true);
+		fillLabel(args, Center, 36, "Smile", 19, true);
 	}
 };
 
@@ -48,7 +54,7 @@ struct SmileWidget : ModuleWidget
 	{
 		setModule(module);
 		auto panel = new SmilePanel();
-		panel->setPanelWidth(100);
+		panel->setPanelWidth(PanelWidth);
 		panel->setBackground(asset::plugin(pluginInstance, "res/Smile.svg"));
 		setPanel(panel);
 
