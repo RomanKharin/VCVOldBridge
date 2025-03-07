@@ -42,7 +42,7 @@ struct SmilePanel : OldBridgeBasePanel
 	{
 		OldBridgeBasePanel::draw(args);
 
-		nvgFillColor(args.vg, nvgRGBAf(1, 1, 1, 1.0));
+		nvgFillColor(args.vg, OldBridgeConst::RGBForeground);
 		fillLabel(args, Center, 21, "Russian", 19, true);
 		fillLabel(args, Center, 36, "Smile", 19, true);
 	}

@@ -85,7 +85,8 @@ struct Filter : Module
                 fft_buffer[i] *= a;
             }
             // debug view
-            if (false) {
+            if (false)
+            {
                 memcpy(fft_buffer, proc_buffer, FFT_SIZE * sizeof(float));
             }
         }
@@ -104,7 +105,7 @@ struct FilterPanel : OldBridgeBasePanel
     {
         OldBridgeBasePanel::draw(args);
 
-        nvgFillColor(args.vg, nvgRGBAf(1, 1, 1, 1.0));
+        nvgFillColor(args.vg, OldBridgeConst::RGBForeground);
         fillLabel(args, Center, 13, "Simple Filter", 12, true);
 
         fillLabel(args, Center, 90 - 10.5, "AUDIO IN");
@@ -193,13 +194,13 @@ struct FilterWidget : ModuleWidget
         addChild(createWidget<ScrewBlack>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
         addChild(createWidget<ScrewBlack>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(PU(Center), PU(90))), module, Filter::AUDIO_IN_INPUT));
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(PU(Center), PU(230))), module, Filter::AUDIO_OUT_OUTPUT));
+        addInput(createInputCentered<PJ301MPort>(pu2px(Vec(Center, 90)), module, Filter::AUDIO_IN_INPUT));
+        addOutput(createOutputCentered<PJ301MPort>(pu2px(Vec(Center, 230)), module, Filter::AUDIO_OUT_OUTPUT));
 
-        addParam(createParamCentered<OldBridgeRoundSmallBlackKnob>(mm2px(Vec(PU(Center), PU(120))), module, Filter::GAIN_PARAM));
+        addParam(createParamCentered<OldBridgeRoundSmallBlackKnob>(pu2px(Vec(Center, 120)), module, Filter::GAIN_PARAM));
 
-        GraphDisplay *display = createWidget<GraphDisplay>(mm2px(Vec(PU(5), PU(21))));
-        display->box.size = mm2px(Vec(PU(90), PU(53)));
+        GraphDisplay *display = createWidget<GraphDisplay>(pu2px(Vec(5, 21)));
+        display->box.size = pu2px(Vec(90, 53));
         display->module = module;
         display->moduleWidget = this;
         addChild(display);

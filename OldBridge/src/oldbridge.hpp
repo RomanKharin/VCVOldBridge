@@ -223,13 +223,4 @@ struct OldBridgeBasePanel : TransparentWidget
         float y = mm2px(PU(pu_y));
         nvgText(args.vg, x, y + (bounds[3] - bounds[1]) / 4.f, string, NULL);
     }
-
-    inline float getLine(int num)
-    {
-        if (num == 0)
-        {
-            return panel_width / 2.f;
-        }
-        return 0;
-    }
 };
