@@ -97,6 +97,8 @@ inline namespace FilterPanelConst
 {
     const float PanelWidth = 100;
     const float Center = PanelWidth / 2.f;
+
+    const NVGcolor RGBGraphlines = nvgRGB(100, 100, 100);
 };
 
 struct FilterPanel : OldBridgeBasePanel
@@ -138,7 +140,7 @@ struct GraphDisplay : TransparentWidget
             float y_pos = box.size.y / 2.f;
 
             // trim view port render
-            Rect b = box.zeroPos().shrink(Vec(PU(1), PU(1)));
+            Rect b = box.zeroPos().shrink(Vec(0.5f, 0.5f));
             /*
             nvgBeginPath(args.vg);
             nvgRect(args.vg, b.pos.x, b.pos.y, b.size.x, b.size.y);
@@ -150,7 +152,7 @@ struct GraphDisplay : TransparentWidget
             nvgBeginPath(args.vg);
             nvgMoveTo(args.vg, 0, y_pos);
             nvgLineTo(args.vg, box.size.x, y_pos);
-            nvgStrokeColor(args.vg, nvgRGB(100, 100, 100));
+            nvgStrokeColor(args.vg, RGBGraphlines);
             nvgStrokeWidth(args.vg, 0.5);
             nvgStroke(args.vg);
 

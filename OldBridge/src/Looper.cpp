@@ -110,13 +110,13 @@ struct LooperWidget : ModuleWidget
         addChild(createWidget<ScrewBlack>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
         addChild(createWidget<ScrewBlack>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(PU(LeftLine), PU(GateInTop))), module, Looper::GATE_IN_INPUT));
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(PU(LeftLine), PU(CVTop))), module, Looper::CV_IN_INPUT));
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(PU(LeftLine), PU(AudioInTop))), module, Looper::AUDIO_IN_INPUT));
+        addInput(createInputCentered<PJ301MPort>(pu2px(Vec(LeftLine, GateInTop)), module, Looper::GATE_IN_INPUT));
+        addInput(createInputCentered<PJ301MPort>(pu2px(Vec(LeftLine, CVTop)), module, Looper::CV_IN_INPUT));
+        addInput(createInputCentered<PJ301MPort>(pu2px(Vec(LeftLine, AudioInTop)), module, Looper::AUDIO_IN_INPUT));
 
-        addParam(createParamCentered<OldBridgeRoundSmallBlackKnob>(mm2px(Vec(PU(Center), PU(GainTop))), module, Looper::GAIN_PARAM));
+        addParam(createParamCentered<OldBridgeRoundSmallBlackKnob>(pu2px(Vec(Center, GainTop)), module, Looper::GAIN_PARAM));
 
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(PU(LeftLine), PU(WidgetLast))), module, Looper::GATE_OUT_OUTPUT));
+        addOutput(createOutputCentered<PJ301MPort>(pu2px(Vec(LeftLine, WidgetLast)), module, Looper::GATE_OUT_OUTPUT));
     }
 };
 

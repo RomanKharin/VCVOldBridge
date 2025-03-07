@@ -2,17 +2,15 @@
 #include <rack.hpp>
 #include <math.hpp>
 
-#define PU(x) ((x) * 0.508f)
-
 /** Converts PU units to pixels */
 inline float pu2px(float mm)
 {
-    return mm * 0.508f * (SVG_DPI / MM_PER_IN);
+    return mm * (0.508f * SVG_DPI / MM_PER_IN);
 }
 
 inline math::Vec pu2px(math::Vec mm)
 {
-    return mm.mult(0.508f).mult(SVG_DPI / MM_PER_IN);
+    return mm.mult(0.508f * SVG_DPI / MM_PER_IN);
 }
 
 using namespace rack;
@@ -68,7 +66,7 @@ struct OldBridgeBasePanel : TransparentWidget
     {
         panel_width = pu_width;
         // Round framebuffer size to nearest grid
-        fb->box.size = math::Vec(mm2px(PU(pu_width)), RACK_GRID_HEIGHT).div(RACK_GRID_SIZE).round().mult(RACK_GRID_SIZE);
+        fb->box.size = math::Vec(pu2px(pu_width), RACK_GRID_HEIGHT).div(RACK_GRID_SIZE).round().mult(RACK_GRID_SIZE);
         panelBorder->box.size = fb->box.size;
         box.size = fb->box.size;
 
@@ -99,12 +97,12 @@ struct OldBridgeBasePanel : TransparentWidget
 
         nvgRotate(args.vg, -M_PI_2);
         nvgBeginPath(args.vg);
-        nvgFontSize(args.vg, mm2px(PU(5)));
+        nvgFontSize(args.vg, pu2px(5));
         nvgFontFaceId(args.vg, bold_font->handle);
         nvgFillColor(args.vg, nvgRGB(60, 60, 60));
-        nvgText(args.vg, -mm2px(PU(252 - 0.5)), mm2px(PU(4 + 0.5)), "OLD BRIDGE", NULL);
+        nvgText(args.vg, -pu2px(252 - 0.5), pu2px(4 + 0.5), "OLD BRIDGE", NULL);
         nvgFillColor(args.vg, nvgRGB(160, 160, 160));
-        nvgText(args.vg, -mm2px(PU(252)), mm2px(PU(4)), "OLD BRIDGE", NULL);
+        nvgText(args.vg, -pu2px(252), pu2px(4), "OLD BRIDGE", NULL);
         nvgRestore(args.vg);
 
         if (sw)
@@ -118,12 +116,12 @@ struct OldBridgeBasePanel : TransparentWidget
     inline void drawKnobGauge(const DrawArgs &args, float pu_x, float pu_y, bool up_link = false)
     {
         nvgBeginPath(args.vg);
-        nvgArc(args.vg, mm2px(PU(pu_x)), mm2px(PU(pu_y)),
-               mm2px(PU(9)), M_PI * 2 / 3, M_PI / 3, NVG_CW);
+        nvgArc(args.vg, pu2px(pu_x), pu2px(pu_y),
+               pu2px(9), M_PI * 2 / 3, M_PI / 3, NVG_CW);
         if (up_link)
         {
-            nvgMoveTo(args.vg, mm2px(PU(pu_x)), mm2px(PU(pu_y - 10)));
-            nvgLineTo(args.vg, mm2px(PU(pu_x)), mm2px(PU(pu_y - 12)));
+            nvgMoveTo(args.vg, pu2px(pu_x), pu2px(pu_y - 10));
+            nvgLineTo(args.vg, pu2px(pu_x), pu2px(pu_y - 12));
         }
         nvgStrokeColor(args.vg, OldBridgeConst::RGBForeground);
         nvgStrokeWidth(args.vg, 0.8);
@@ -133,18 +131,18 @@ struct OldBridgeBasePanel : TransparentWidget
     inline void drawOutRect(const DrawArgs &args, float pu_x, float pu_y, bool fill = false, bool status_led = false)
     {
         nvgBeginPath(args.vg);
-        float x = mm2px(PU(pu_x));
-        float y = mm2px(PU(pu_y));
+        float x = pu2px(pu_x);
+        float y = pu2px(pu_y);
         nvgRoundedRect(args.vg,
-                       x - mm2px(PU(10)),
-                       y - mm2px(PU(10)),
-                       mm2px(PU(20)),
-                       mm2px(PU(20)),
-                       mm2px(PU(2)));
+                       x - pu2px(10),
+                       y - pu2px(10),
+                       pu2px(20),
+                       pu2px(20),
+                       pu2px(2));
         nvgStrokeColor(args.vg, OldBridgeConst::RGBForeground);
         nvgStrokeWidth(args.vg, 0.8);
         if (status_led)
-            nvgCircle(args.vg, x - mm2px(PU(9)), y + mm2px(PU(9)), mm2px(PU(3.25)));
+            nvgCircle(args.vg, x - pu2px(9), y + pu2px(9), pu2px(3.25));
         nvgStroke(args.vg);
         if (fill)
         {
@@ -157,14 +155,14 @@ struct OldBridgeBasePanel : TransparentWidget
                               bool fill = false, const char *string = NULL, float font_size = 5.5)
     {
         nvgBeginPath(args.vg);
-        float x = mm2px(PU(pu_x));
-        float y = mm2px(PU(pu_y));
+        float x = pu2px(pu_x);
+        float y = pu2px(pu_y);
         nvgRoundedRect(args.vg,
                        x,
                        y,
-                       mm2px(PU(pu_w)),
-                       mm2px(PU(pu_h)),
-                       mm2px(PU(2)));
+                       pu2px(pu_w),
+                       pu2px(pu_h),
+                       pu2px(2));
         if (fill)
         {
             nvgFillColor(args.vg, OldBridgeConst::RGBDark);
@@ -175,7 +173,7 @@ struct OldBridgeBasePanel : TransparentWidget
         nvgStroke(args.vg);
         if (string)
         {
-            nvgFontSize(args.vg, mm2px(PU(font_size)));
+            nvgFontSize(args.vg, pu2px(font_size));
             nvgFontFaceId(args.vg, main_font->handle);
             float bounds[4];
             nvgTextBounds(args.vg, 0, 0, string, NULL, bounds);
@@ -185,21 +183,21 @@ struct OldBridgeBasePanel : TransparentWidget
             nvgRoundedRect(args.vg,
                            x,
                            y,
-                           bounds[2] + mm2px(PU(2)),
+                           bounds[2] + pu2px(2),
                            (bounds[3] - bounds[1]),
-                           mm2px(PU(1)));
+                           pu2px(1));
             nvgFill(args.vg);
             nvgBeginPath(args.vg);
             nvgFillColor(args.vg, OldBridgeConst::RGBBackground);
-            nvgText(args.vg, x + mm2px(PU(1)), y + mm2px(PU(font_size * 0.8)), string, NULL);
+            nvgText(args.vg, x + pu2px(1), y + pu2px(font_size * 0.8), string, NULL);
         }
     }
 
     inline void fillKnobPoint(const DrawArgs &args, float pu_x, float pu_y, float point)
     {
-        float x = mm2px(PU(pu_x));
-        float y = mm2px(PU(pu_y));
-        float r = mm2px(PU(9));
+        float x = pu2px(pu_x);
+        float y = pu2px(pu_y);
+        float r = pu2px(9);
         float a = point * M_PI * 5.f / 3.f + M_PI * 2 / 3;
         nvgCircle(args.vg, x + cos(a) * r, y + sin(a) * r, 1.3f);
     }
@@ -208,7 +206,7 @@ struct OldBridgeBasePanel : TransparentWidget
                           float font_size = 5.5f, bool bold = false)
     {
         nvgFillColor(args.vg, OldBridgeConst::RGBForeground);
-        nvgFontSize(args.vg, mm2px(PU(font_size)));
+        nvgFontSize(args.vg, pu2px(font_size));
         if (bold)
         {
             nvgFontFaceId(args.vg, bold_font->handle);
@@ -219,8 +217,8 @@ struct OldBridgeBasePanel : TransparentWidget
         }
         float bounds[4];
         nvgTextBounds(args.vg, 0, 0, string, NULL, bounds);
-        float x = mm2px(PU(pu_x)) - (bounds[2] - bounds[0]) / 2.f;
-        float y = mm2px(PU(pu_y));
+        float x = pu2px(pu_x) - (bounds[2] - bounds[0]) / 2.f;
+        float y = pu2px(pu_y);
         nvgText(args.vg, x, y + (bounds[3] - bounds[1]) / 4.f, string, NULL);
     }
 };
