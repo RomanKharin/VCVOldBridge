@@ -38,8 +38,8 @@ struct RandomFunctionDelayTriggerPanel : OldBridgeBasePanel
         OldBridgeBasePanel::draw(args);
 
         nvgFillColor(args.vg, OldBridgeConst::RGBForeground);
-        fillLabel(args, 60, 8, "Random Function", 9.5, true);
-        fillLabel(args, 60, 16, "Delay Trigger", 9.5, true);
+        fillLabel(args, Center, 8, "Random Function", 9.5, true);
+        fillLabel(args, Center, 16, "Delay Trigger", 9.5, true);
 
         drawRoundRect(args, 4, 24, 112, 50, true);
 
