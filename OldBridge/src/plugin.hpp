@@ -11,3 +11,4 @@ extern Plugin* pluginInstance;
 extern Model* modelSmile;
 extern Model* modelLooper;
 extern Model* modelFilter;
+extern Model* modelRandomFunctionDelayTrigger;

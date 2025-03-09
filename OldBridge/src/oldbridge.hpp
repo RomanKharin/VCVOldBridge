@@ -22,8 +22,11 @@ namespace OldBridgeConst
     const float HLabelInJack = 10.5;
     const float HLabelOutJack = 13.5;
     const float HLabelKnob = 12.5;
-    const float HJackJack = 25;
+    const float HLabelTrim = 8.5;
+    const float HJackJack = 23;
     const float HJackKnob = 25;
+    const float HKnobKnob = 26;
+    const float HKnobJack = 24;
 
     const NVGcolor RGBDark = nvgRGB(0x10, 0x10, 0x10);
     const NVGcolor RGBForeground = nvgRGB(0xFF, 0xFF, 0xFF);

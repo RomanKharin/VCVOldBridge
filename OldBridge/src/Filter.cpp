@@ -125,7 +125,7 @@ struct FilterPanel : OldBridgeBasePanel
     }
 };
 
-struct GraphDisplay : TransparentWidget
+struct FilterPanelGraphDisplay : TransparentWidget
 {
     Filter *module;
     ModuleWidget *moduleWidget;
@@ -201,7 +201,7 @@ struct FilterWidget : ModuleWidget
 
         addParam(createParamCentered<OldBridgeRoundSmallBlackKnob>(pu2px(Vec(Center, 120)), module, Filter::GAIN_PARAM));
 
-        GraphDisplay *display = createWidget<GraphDisplay>(pu2px(Vec(5, 21)));
+        FilterPanelGraphDisplay *display = createWidget<FilterPanelGraphDisplay>(pu2px(Vec(5, 21)));
         display->box.size = pu2px(Vec(90, 53));
         display->module = module;
         display->moduleWidget = this;

@@ -13,6 +13,16 @@
   "donateUrl": "",
   "changelogUrl": "",
   "modules": [
+    
+    {
+      "slug": "RandomFunctionDelayTrigger",
+      "name": "Random Function Delay Trigger",
+      "description": "Delay triiger by randon value defined by function",
+      "tags": [
+        "Trigger",
+        "Delay"
+      ]
+    },
     {
       "slug": "Smile",
       "name": "Smile",

@@ -11,4 +11,5 @@ void init(Plugin* p) {
 	p->addModel(modelSmile);
 	p->addModel(modelLooper);
 	p->addModel(modelFilter);
+	p->addModel(modelRandomFunctionDelayTrigger);
 }
