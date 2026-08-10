@@ -21,3 +21,17 @@ DISTRIBUTABLES += $(wildcard presets)
 
 # Include the Rack plugin Makefile framework
 include $(RACK_DIR)/plugin.mk
+
+# Generate .vcvm presets from src/presets/<slug>/<name>.json into presets/.
+# Uses helpers/create_presets.py (one call per module that has a src/presets dir).
+presets:
+	@for d in $(wildcard src/presets/*/); do \
+		slug=$$(basename $$d); \
+		python3 helpers/create_presets.py $$slug; \
+	done
+	@echo "Presets generated from src/presets"
+
+# Presets are part of DISTRIBUTABLES, so regenerate them for the dist package
+dist: presets
+
+.PHONY: presets

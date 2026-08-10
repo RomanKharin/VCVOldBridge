@@ -1,0 +1,13 @@
+{
+    "FILTER_PARAM": {},
+    "X_PARAM": {},
+    "Y_PARAM": {},
+    "W_PARAM": {},
+    "Q_PARAM": {},
+    "SEED_PARAM": {},
+    "VIEW_PARAM": {
+        "type": "hidden"
+    },
+    "GAIN_PARAM": {},
+    "V_PARAM": {}
+}
