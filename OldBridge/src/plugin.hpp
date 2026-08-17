@@ -10,5 +10,6 @@ extern Plugin* pluginInstance;
 // Declare each Model, defined in each module source file
 extern Model* modelSmile;
 extern Model* modelLooper;
+extern Model* modelLooperExpander;
 extern Model* modelFilter;
 extern Model* modelRandomFunctionDelayTrigger;

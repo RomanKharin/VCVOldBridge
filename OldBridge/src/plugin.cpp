@@ -10,6 +10,7 @@ void init(Plugin* p) {
 	// Add modules here
 	p->addModel(modelSmile);
 	p->addModel(modelLooper);
+	p->addModel(modelLooperExpander);
 	p->addModel(modelFilter);
 	p->addModel(modelRandomFunctionDelayTrigger);
 }

@@ -41,6 +41,14 @@
       ]
     },
     {
+      "slug": "LooperExpander",
+      "name": "Looper +3",
+      "description": "Looper expander, adds 3 tracks",
+      "tags": [
+        "Looper"
+      ]
+    },
+    {
       "slug": "Filter",
       "name": "Filter",
       "description": "Filter",

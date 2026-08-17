@@ -6,16 +6,12 @@ import os
 import sys
 
 
-def main(module_slug: str):
-    BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    SRC_PRESET = os.path.join(BASE, "src", "presets", module_slug)
-    SRC_CPP = os.path.join(BASE, "src", f"{module_slug}.cpp")
-    DEST_PRESET = os.path.join(BASE, "presets", module_slug)
+def read_params_from_cpp(filename: str) -> dict:
 
-    mode = 0  # 0 - search, 1 - scan
     params = []
     params_ids = {}
-    with open(SRC_CPP, "r") as sf:
+    mode = 0  # 0 - search, 1 - scan
+    with open(filename, "r") as sf:
         for line in sf.readlines():
             if mode == 0:
                 if "enum ParamId" in line:
@@ -35,6 +31,17 @@ def main(module_slug: str):
                 params.append(param)
     for idx, param in enumerate(params):
         params_ids[param] = idx
+
+    return params_ids, params
+
+
+def main(module_slug: str):
+    BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    SRC_PRESET = os.path.join(BASE, "src", "presets", module_slug)
+    SRC_CPP = os.path.join(BASE, "src", f"{module_slug}.cpp")
+    DEST_PRESET = os.path.join(BASE, "presets", module_slug)
+
+    params_ids, params = read_params_from_cpp(SRC_CPP)
 
     default_fn = os.path.join(SRC_PRESET, "default.json")
     default_src = {}
